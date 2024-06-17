@@ -28,16 +28,17 @@ namespace Messaging_Service
             Console.WriteLine(ipEndPoint);
 
         }
-        /// <summary>
-        /// This method runs the sending service of the program.
-        /// </summary>
-        /// 
-        public async void Handshake(string KeyToSend)
+
+        private async void SendKey(string KeyToSend)
+        {
+
+        }
+        private async void ReciveKey()
         {
             using Socket listener = new(
-                    ipEndPoint.AddressFamily,
-                    SocketType.Stream,
-                    ProtocolType.Tcp);
+                   ipEndPoint.AddressFamily,
+                   SocketType.Stream,
+                   ProtocolType.Tcp);
             listener.Bind(ipEndPoint);
             listener.Listen(100);
 
@@ -61,9 +62,31 @@ namespace Messaging_Service
                     $"Socket server sent acknowledgment: \"{ackMessage}\"");
 
             }
-            
+        }
+        //Need to set a thread to repeat the public key to the other client and set the lisner on
+        //wait until both jobs are done 
+        /// <summary>
+        /// This method runs the handshake service.
+        /// </summary>
+        /// 
+        public async void Handshake(string KeyToSend)
+        {
+            //Add Task for each type of handshake 
+            Thread t1 = new Thread(() => SendKey(KeyToSend));
+            Thread t2 = new Thread(() => ReciveKey());
+
+            t1.Start();
+            t2.Start();
+
+            t1.Join();
+            t2.Join();
+
 
         }
+        /// <summary>
+        /// This method runs the sending service of the program.
+        /// </summary>
+        /// 
         public async Task startService()
         {
             using Socket client = new(

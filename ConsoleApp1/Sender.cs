@@ -16,6 +16,7 @@ namespace Messaging_Service
     {
         private IPAddress ipAddress;
         private IPEndPoint ipEndPoint;
+        private string pubKey;
         public Sender(IPHostEntry ipHostInfo)
         { 
             ipAddress = ipHostInfo.AddressList[0];
@@ -30,6 +31,39 @@ namespace Messaging_Service
         /// <summary>
         /// This method runs the sending service of the program.
         /// </summary>
+        /// 
+        public async void Handshake(string KeyToSend)
+        {
+            using Socket listener = new(
+                    ipEndPoint.AddressFamily,
+                    SocketType.Stream,
+                    ProtocolType.Tcp);
+            listener.Bind(ipEndPoint);
+            listener.Listen(100);
+
+            var handler = await listener.AcceptAsync();
+
+            // Receive message.
+            var buffer = new byte[1_024];
+            var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
+            var response = Encoding.UTF8.GetString(buffer, 0, received);
+
+            var eom = "<|EOM|>";
+            if (response.IndexOf(eom) > -1 /* is end of message */)
+            {
+                Console.WriteLine(
+                    $"Socket server received message: \"{response.Replace(eom, "")}\"");
+
+                var ackMessage = "<|ACK|>";
+                var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
+                await handler.SendAsync(echoBytes, 0);
+                Console.WriteLine(
+                    $"Socket server sent acknowledgment: \"{ackMessage}\"");
+
+            }
+            
+
+        }
         public async Task startService()
         {
             using Socket client = new(

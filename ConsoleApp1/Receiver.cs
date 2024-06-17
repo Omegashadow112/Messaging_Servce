@@ -27,11 +27,7 @@ namespace Messaging_Service
             Console.WriteLine(ipEndPoint);
 
         }
-        public string handshake()
-        { 
-            return ipAddress.ToString(); 
         
-        }
         /// <summary>
         /// This method runs the receiving service of the program.
         /// </summary>

@@ -27,10 +27,15 @@ namespace Messaging_Service
             Console.WriteLine(ipEndPoint);
 
         }
+        public string handshake()
+        { 
+            return ipAddress.ToString(); 
+        
+        }
         /// <summary>
         /// This method runs the receiving service of the program.
         /// </summary>
-        public  async Task startService()
+        public  async void startService()
         {
             using Socket listener = new(
                     ipEndPoint.AddressFamily,

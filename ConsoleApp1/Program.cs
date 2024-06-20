@@ -22,15 +22,15 @@ namespace Messaging_Service
         //Start with figuring out asymetric encyption. get it working locally 
         static async Task Main(string[] args)
         {
-            
-            IPHostEntry serverIP = null;
-            IPHostEntry clientIP = null;
+
+            IPAddress serverIP = null;
+            IPAddress clientIP = null;
             while (true)
             {
                 Console.WriteLine("What is the IP of this machine.");
-                serverIP = await Dns.GetHostEntryAsync($"{Console.ReadLine()}");
+                serverIP = IPAddress.Parse(Console.ReadLine());
                 Console.WriteLine("What is the IP of the machine you want to send messages to.");
-                clientIP = await Dns.GetHostEntryAsync($"{Console.ReadLine()}");
+                clientIP = IPAddress.Parse(Console.ReadLine());
                 if(serverIP != null && clientIP != null ) 
                 {
                     break;

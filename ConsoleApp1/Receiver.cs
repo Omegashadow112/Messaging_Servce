@@ -16,9 +16,9 @@ namespace Messaging_Service
     {
         private IPAddress ipAddress;
         private IPEndPoint ipEndPoint;
-        public Receiver(IPHostEntry ipHostInfo)
-        { 
-            ipAddress = ipHostInfo.AddressList[0];
+        public Receiver(IPAddress ipHostInfo)
+        {
+            ipAddress = ipHostInfo;
             ipEndPoint = new(ipAddress, 11_000);
         }
         public void printf()

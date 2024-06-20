@@ -48,10 +48,12 @@ namespace Messaging_Service
             byte[] decryptedData = rsa.Decrypt(encryptedData, false);
             string message = Encoding.UTF8.GetString(decryptedData);
             Console.WriteLine(message);
-            //Receiver Server = new Receiver(serverIP);
+
+            Receiver Server = new Receiver(serverIP);
             //Thread serverThread = new Thread(new ThreadStart(Server.startService));
             //serverThread.Start();
-            //Sender Client = new Sender(clientIP);
+            Sender Client = new Sender(clientIP);
+            Client.Handshake(publicKeyXML);
             //Client.startService().Wait();
             //serverThread.Join();
 
